@@ -1,9 +1,8 @@
 # DAT153-Gruppe17
 
-To add a classmate with an image use one of the following image name: 
+To add a classmate with an image use one of the following image names: 
 
 classmate_1
-
 
 classmate_2
 
