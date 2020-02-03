@@ -8,6 +8,7 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -31,8 +32,10 @@ public class QuizActivity extends AppCompatActivity {
     Integer score;
     List<Bitmap> imageDatabase;
     String currImg;
+    Button btnText;
 
     public static final String PREF = "pref";
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -41,40 +44,46 @@ public class QuizActivity extends AppCompatActivity {
         image = findViewById(R.id.quizImage);
         result = findViewById(R.id.resultText);
         scoreText = findViewById(R.id.scoreNumberText);
-        sp = getSharedPreferences(PREF,  Context.MODE_PRIVATE);
+        btnText = findViewById(R.id.guessButton);
+        sp = getSharedPreferences(PREF, Context.MODE_PRIVATE);
         score = 0;
-        images = getImages();
-        names = getNames();
-        getRandomImage();
+        if (sp.getAll().isEmpty()) {
+            System.out.println("sp is empty " + sp.getAll().size());
+            name.setText("No Classmates!");
+            image.setImageBitmap(bitmapImage("database_empty"));
+            btnText.setText("Return to main menu");
+        } else {
+            images = getImages();
+            names = getNames();
+            getRandomImage();
+        }
+
     }
 
     //Lager to lister, en til filnavn og en til de faktiske bildene
     public ArrayList<Object> getImages() {
         System.out.println("SP: " + sp.getAll().toString());
-        Map<String,?> keys = sp.getAll();
+        Map<String, ?> keys = sp.getAll();
         images = new ArrayList<>();
         imageDatabase = new ArrayList<>();
         int i = 0;
-        if (sp.getAll().size() <= 0) {
-            names.add("No Classmates!");
-            imageDatabase.add(bitmapImage("database_empty"));
-        } else {
-            for(Map.Entry<String,?> entry : keys.entrySet()){
-                images.add(i, entry.getKey());
-                imageDatabase.add(bitmapImage(images.get(i).toString()));
-                System.out.println("image:" + entry.getKey() + " Name: " + entry.getValue().toString());
-                i++;
-            }
+        for (Map.Entry<String, ?> entry : keys.entrySet()) {
+            images.add(i, entry.getKey());
+            imageDatabase.add(bitmapImage(images.get(i).toString()));
+            System.out.println("image:" + entry.getKey() + " Name: " + entry.getValue().toString());
+            i++;
         }
+
 
         return images;
     }
+
     //Lager en liste med navnene til bildene.
     public ArrayList<Object> getNames() {
-        Map<String,?> keys = sp.getAll();
+        Map<String, ?> keys = sp.getAll();
         names = new ArrayList<>();
         int i = 0;
-        for(Map.Entry<String,?> entry : keys.entrySet()){
+        for (Map.Entry<String, ?> entry : keys.entrySet()) {
             names.add(i, entry.getValue().toString());
             i++;
             System.out.println("image:" + entry.getKey() + " Name: " + entry.getValue().toString());
@@ -83,7 +92,7 @@ public class QuizActivity extends AppCompatActivity {
     }
 
     //Finner et tilfeldig bilde, og setter det i imageView på quiz aktiviteten.
-    public void getRandomImage () {
+    public void getRandomImage() {
         images = getImages();
         rnd = new Random();
         int random = rnd.nextInt(images.size());
@@ -92,10 +101,11 @@ public class QuizActivity extends AppCompatActivity {
         currImg = images.get(random).toString();
 
     }
+
     //Handlingen som skjer når man trykker på knappen for å gjette.
     //Sjekker om brukeren har svart rett, gir tilbakemelding, oppdaterer poengsum
     //Og kaller på metoden for å få et nytt tilfeldig bilde.
-    public void guess(View view){
+    public void guess(View view) {
         String n = name.getText().toString();
         String img = currImg;
         Boolean found = false;
@@ -104,20 +114,18 @@ public class QuizActivity extends AppCompatActivity {
         names = getNames();
         sp = getSharedPreferences(PREF,
                 Context.MODE_PRIVATE);
-        if(sp.contains(img)){
-            while(!found){
-                if(images.get(i).equals(img)){
+        if (sp.contains(img)) {
+            while (!found) {
+                if (images.get(i).equals(img)) {
                     found = true;
-                }
-                else{
+                } else {
                     i++;
                 }
             }
-            if(names.get(i).toString().toUpperCase().equals(n.toUpperCase())){
+            if (names.get(i).toString().toUpperCase().equals(n.toUpperCase())) {
                 score += 1;
                 result.setText("Correct!");
-            }
-            else{
+            } else {
                 result.setText("Wrong..");
             }
         }

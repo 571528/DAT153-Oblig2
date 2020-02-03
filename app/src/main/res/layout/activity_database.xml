@@ -24,6 +24,6 @@
         android:contentDescription="imageView"
         android:elevation="2dp"
         android:onClick="toAdd"
-        android:srcCompat="@drawable/ic_add_circle_black_24dp" />
+        android:src="@drawable/ic_add_circle_black_24dp" />
 
 </RelativeLayout>
