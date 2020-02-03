@@ -8,6 +8,11 @@ classmate_2
 
 classmate_3
 
-Use these same image names to remove a classmate
+Use these same image names to remove a classmate *fixed
 
-App crashes if quiz is started before adding a classmate
+App crashes if quiz is started before adding a classmate *fixed
+
+MISSING: 
+ 
+ Tests 
+ Access preferences through app 
