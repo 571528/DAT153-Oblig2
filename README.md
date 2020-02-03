@@ -15,4 +15,5 @@ App crashes if quiz is started before adding a classmate *fixed
 MISSING: 
  
  Tests 
+ 
  Access preferences through app 
