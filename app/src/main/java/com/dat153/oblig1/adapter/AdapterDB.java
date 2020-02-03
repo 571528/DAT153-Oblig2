@@ -3,12 +3,14 @@ package com.dat153.oblig1.adapter;
 import java.util.List;
 
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -19,6 +21,8 @@ import com.dat153.oblig1.R;
 public class AdapterDB extends RecyclerView.Adapter<AdapterDB.ViewHolder> {
     private List<String> values;
     private List<Bitmap> images;
+    private List<String> imgFilename;
+    SharedPreferences sp;
 
     // Provide a reference to the views for each data item
     // Complex data items may need more than one view per item, and
@@ -27,6 +31,7 @@ public class AdapterDB extends RecyclerView.Adapter<AdapterDB.ViewHolder> {
         // each data item is just a string in this case
         public TextView txtName;
         public ImageView icon;
+        public ImageButton rmButton;
         public View layout;
 
         public ViewHolder(View v) {
@@ -34,14 +39,22 @@ public class AdapterDB extends RecyclerView.Adapter<AdapterDB.ViewHolder> {
             layout = v;
             txtName = v.findViewById(R.id.dbName);
             icon = v.findViewById(R.id.icon);
+            rmButton = v.findViewById(R.id.rmButton);
         }
     }
 
-    public void add(int position, String item, Bitmap bm) {
+    public void add(int position, String item, Bitmap bm, String imgFile) {
         values.add(position, item);
         images.add(position, bm);
         notifyItemInserted(position);
     }
+
+    public void removeFromSP(int position) {
+        SharedPreferences.Editor editor = sp.edit();
+        editor.remove(imgFilename.get(position));
+        editor.commit();
+    }
+
 
     public void remove(int position) {
         values.remove(position);
@@ -50,9 +63,11 @@ public class AdapterDB extends RecyclerView.Adapter<AdapterDB.ViewHolder> {
     }
 
     // Provide a suitable constructor (depends on the kind of dataset)
-    public AdapterDB(List<String> nameList, List<Bitmap> imageList) {
+    public AdapterDB(Context appContext, List<String> nameList, List<Bitmap> imageList, List<String> fileList) {
         values = nameList;
         images = imageList;
+        imgFilename = fileList;
+        sp = appContext.getSharedPreferences("pref", Context.MODE_PRIVATE);
     }
 
     // Create new views (invoked by the layout manager)
@@ -79,15 +94,19 @@ public class AdapterDB extends RecyclerView.Adapter<AdapterDB.ViewHolder> {
         holder.txtName.setText(name);
         holder.icon.setImageBitmap(pic);
 
-        holder.txtName.setOnClickListener(new OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                remove(position);
-            }
-        });
+        if (!(name.equals("No Classmates!"))) {
+            holder.rmButton.setOnClickListener(new OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    removeFromSP(position);
+                    remove(position);
+                }
+            });
+            holder.txtName.setText(name);
+            holder.icon.setImageBitmap(pic);
+        }
 
-        holder.txtName.setText(name);
-        holder.icon.setImageBitmap(pic);
+
     }
 
     // Return the size of your dataset (invoked by the layout manager)

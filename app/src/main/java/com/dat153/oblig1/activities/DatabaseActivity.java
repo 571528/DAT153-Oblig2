@@ -57,7 +57,7 @@ public class DatabaseActivity extends AppCompatActivity {
             }
         }
         // define an adapter
-        mAdapter = new AdapterDB(nameDatabase, imageDatabase);
+        mAdapter = new AdapterDB(getApplicationContext(), nameDatabase, imageDatabase, imgFileName);
         recyclerView.setAdapter(mAdapter);
     }
 
