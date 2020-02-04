@@ -6,36 +6,6 @@
     android:layout_height="match_parent"
     tools:context=".activities.MainActivity">
 
-    <com.google.android.material.floatingactionbutton.FloatingActionButton
-        android:id="@+id/dbButton"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="284dp"
-        android:layout_marginBottom="391dp"
-        android:clickable="true"
-        android:onClick="toDatabase"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:srcCompat="@drawable/ic_storage_black_24dp" />
-
-    <com.google.android.material.floatingactionbutton.FloatingActionButton
-        android:id="@+id/quizButton"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="178dp"
-        android:layout_marginLeft="178dp"
-        android:layout_marginTop="16dp"
-        android:layout_marginEnd="177dp"
-        android:layout_marginRight="177dp"
-        android:clickable="true"
-        android:onClick="toQuiz"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/dbButton"
-        app:srcCompat="@drawable/ic_play_arrow_black_24dp" />
-
     <TextView
         android:id="@+id/welcomeText"
         android:layout_width="wrap_content"
@@ -54,8 +24,8 @@
         android:layout_width="220dp"
         android:layout_height="47dp"
         android:ems="10"
-        android:inputType="textPersonName"
         android:hint="Insert app owners name!"
+        android:inputType="textPersonName"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/welcomeText" />
@@ -66,10 +36,29 @@
         android:layout_height="wrap_content"
         android:onClick="saveOwner"
         android:text="Saving owner"
-        app:layout_constraintBottom_toTopOf="@+id/dbButton"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.498"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/ownerText" />
+
+    <ImageButton
+        android:id="@+id/dbButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:onClick="toDatabase"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:srcCompat="@drawable/ic_storage_black_24dp" />
+
+    <ImageButton
+        android:id="@+id/quizButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:onClick="toQuiz"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/dbButton"
+        app:srcCompat="@drawable/ic_play_arrow_black_24dp" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
