@@ -126,7 +126,7 @@ public class QuizActivity extends AppCompatActivity {
                 score += 1;
                 result.setText("Correct!");
             } else {
-                result.setText("Wrong..");
+                result.setText("Wrong.. The correct name was " + names.get(i).toString());
             }
         }
         System.out.println("SCORE:" + score);
