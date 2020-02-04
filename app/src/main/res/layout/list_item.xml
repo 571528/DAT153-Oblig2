@@ -13,7 +13,7 @@
         android:layout_marginEnd="6dip"
         android:layout_marginRight="6dip"
         android:layout_marginBottom="0dp"
-        android:contentDescription="IMAGE FOR LATER"
+        android:contentDescription="@string/dbImage"
         android:src="@drawable/ic_image_black_24dp" />
 
     <TextView
@@ -30,7 +30,7 @@
         android:layout_toEndOf="@+id/icon"
         android:layout_toRightOf="@id/icon"
         android:gravity="center_vertical"
-        android:text="Example application"
+        android:text="@string/dbName"
         android:textSize="16sp" />
 
     <ImageButton
@@ -43,6 +43,7 @@
         android:layout_marginEnd="18dp"
         android:layout_marginRight="18dp"
         android:layout_marginBottom="16dp"
+        android:contentDescription="@string/removeBtn"
         app:srcCompat="@drawable/ic_remove_black_24dp" />
 
 

@@ -2,28 +2,29 @@
     <string name="app_name">Name Quiz</string>
 
     <!--Main Activity-->
-    <!--    Buttons  -->
     <string name="toQuizBtn">To Quiz</string>
-    <string name="toAddBtn">To Add</string>
     <string name="toDbBtn">To Database</string>
-    <string name="toRemoveBtn">To Remove</string>
+    <string name="saveOwnerBtn">Save owner</string>
+    <string name="welcomeTxt">Welcome</string>
+    <string name="insertPlaceholder">Insert app owners name!</string>
+    <!-- Main Menu  -->
+    <string name="sp_item">View SP</string>
+
 
     <!--Add Activity-->
-    <!--Placeholders-->
     <string name="namePlaceHolder">Name</string>
     <string name="imagePlaceholder">Image</string>
-    <!--  Buttons   -->
     <string name="addButton_txt">Add</string>
 
-    <!--Remove Activity-->
-    <!--Placeholder-->
-    <string name="rmImagePlaceholder">Image to remove</string>
-    <!--Buttons-->
-    <string name="rmButton_txt">Remove</string>
-
     <!--Quiz Activity-->
+    <string name="quizHeading">Quiz</string>
     <string name="guessTextPlaceholder">Name</string>
-    <!--Buttons-->
     <string name="guessButtonText">Make guess</string>
     <string name="scoreText">Score:</string>
+    <string name="scoreNumber">0</string>
+
+    <!-- List item  -->
+    <string name="removeBtn">Remove button</string>
+    <string name="dbImage">Classmate Image</string>
+    <string name="dbName">Classmate Name</string>
 </resources>

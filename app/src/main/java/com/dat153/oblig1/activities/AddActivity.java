@@ -28,7 +28,8 @@ public class AddActivity extends AppCompatActivity {
         sp = getSharedPreferences(PREF, Context.MODE_PRIVATE);
     }
 
-    //Fil navn til image er key og skal være unique
+
+    // Image are save in drawable as classmate_1, classmate_2 and classmate_3
     public void save(View view) {
         String n = name.getText().toString();
         String key = image.getText().toString();
@@ -40,6 +41,7 @@ public class AddActivity extends AppCompatActivity {
 
     }
 
+    // Clears insert text box
     public void clear(View view) {
         name = findViewById(R.id.newName);
         image = findViewById(R.id.newImage);
@@ -47,15 +49,7 @@ public class AddActivity extends AppCompatActivity {
         image.setText("");
     }
 
-
-    public void remove(View view) {
-        String key = image.getText().toString();
-        SharedPreferences.Editor editor = sp.edit();
-        editor.remove(key);
-        getList(view);
-        clear(view);
-    }
-
+    // Prints out all item in shared preferences
     public void getList(View view) {
         sp = getSharedPreferences(PREF,
                 Context.MODE_PRIVATE);

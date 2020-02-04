@@ -9,7 +9,7 @@
         android:id="@+id/quizImage"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Quiz"
+        android:text="@string/quizHeading"
         android:layout_marginTop="16dp"
         android:layout_marginLeft="16dp"
         android:layout_marginBottom="50dp"
@@ -81,7 +81,7 @@
         android:layout_marginEnd="16dp"
         android:layout_marginRight="16dp"
         android:layout_marginBottom="55dp"
-        android:text="0"
+        android:text="@string/scoreNumber"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent" />

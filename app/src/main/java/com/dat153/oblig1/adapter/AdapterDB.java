@@ -5,7 +5,6 @@ import java.util.List;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -28,7 +27,6 @@ public class AdapterDB extends RecyclerView.Adapter<AdapterDB.ViewHolder> {
     // Complex data items may need more than one view per item, and
     // you provide access to all the views for a data item in a view holder
     public class ViewHolder extends RecyclerView.ViewHolder {
-        // each data item is just a string in this case
         public TextView txtName;
         public ImageView icon;
         public ImageButton rmButton;
@@ -43,26 +41,28 @@ public class AdapterDB extends RecyclerView.Adapter<AdapterDB.ViewHolder> {
         }
     }
 
+    // Adds to values and images
     public void add(int position, String item, Bitmap bm, String imgFile) {
         values.add(position, item);
         images.add(position, bm);
         notifyItemInserted(position);
     }
 
+    // Removes from shared preferences
     public void removeFromSP(int position) {
         SharedPreferences.Editor editor = sp.edit();
         editor.remove(imgFilename.get(position));
         editor.commit();
     }
 
-
+    // Removes from view
     public void remove(int position) {
         values.remove(position);
         images.remove(position);
         notifyItemRemoved(position);
     }
 
-    // Provide a suitable constructor (depends on the kind of dataset)
+    // Provide a suitable constructor
     public AdapterDB(Context appContext, List<String> nameList, List<Bitmap> imageList, List<String> fileList) {
         values = nameList;
         images = imageList;
@@ -87,7 +87,7 @@ public class AdapterDB extends RecyclerView.Adapter<AdapterDB.ViewHolder> {
     // Replace the contents of a view (invoked by the layout manager)
     @Override
     public void onBindViewHolder(ViewHolder holder, final int position) {
-        // - get element from your dataset at this position
+        // - get a name and image from values and images at this position
         // - replace the contents of the view with that element
         final String name = values.get(position);
         final Bitmap pic = images.get(position);
@@ -109,7 +109,7 @@ public class AdapterDB extends RecyclerView.Adapter<AdapterDB.ViewHolder> {
 
     }
 
-    // Return the size of your dataset (invoked by the layout manager)
+    // Return the size of values (invoked by the layout manager)
     @Override
     public int getItemCount() {
         return values.size();

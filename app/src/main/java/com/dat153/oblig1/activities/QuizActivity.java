@@ -47,6 +47,7 @@ public class QuizActivity extends AppCompatActivity {
         btnText = findViewById(R.id.guessButton);
         sp = getSharedPreferences(PREF, Context.MODE_PRIVATE);
         score = 0;
+        // Edits view for when there are no classmates
         if (sp.getAll().isEmpty()) {
             System.out.println("sp is empty " + sp.getAll().size());
             name.setText("No Classmates!");
@@ -60,12 +61,12 @@ public class QuizActivity extends AppCompatActivity {
 
     }
 
-    //Lager to lister, en til filnavn og en til de faktiske bildene
+    // Creates two lists, one for image filenames and another for actual bitmap images
     public ArrayList<Object> getImages() {
         System.out.println("SP: " + sp.getAll().toString());
         Map<String, ?> keys = sp.getAll();
-        images = new ArrayList<>();
-        imageDatabase = new ArrayList<>();
+        images = new ArrayList<>(); // Filename list
+        imageDatabase = new ArrayList<>(); // Bitmap images list
         int i = 0;
         for (Map.Entry<String, ?> entry : keys.entrySet()) {
             images.add(i, entry.getKey());
@@ -73,12 +74,10 @@ public class QuizActivity extends AppCompatActivity {
             System.out.println("image:" + entry.getKey() + " Name: " + entry.getValue().toString());
             i++;
         }
-
-
         return images;
     }
 
-    //Lager en liste med navnene til bildene.
+    // Creates a list with classmate names
     public ArrayList<Object> getNames() {
         Map<String, ?> keys = sp.getAll();
         names = new ArrayList<>();
@@ -91,7 +90,7 @@ public class QuizActivity extends AppCompatActivity {
         return names;
     }
 
-    //Finner et tilfeldig bilde, og setter det i imageView på quiz aktiviteten.
+    // Finds a random image and add it to imageView in quiz activity
     public void getRandomImage() {
         images = getImages();
         rnd = new Random();
@@ -102,9 +101,9 @@ public class QuizActivity extends AppCompatActivity {
 
     }
 
-    //Handlingen som skjer når man trykker på knappen for å gjette.
-    //Sjekker om brukeren har svart rett, gir tilbakemelding, oppdaterer poengsum
-    //Og kaller på metoden for å få et nytt tilfeldig bilde.
+    // The action that hanppen when the guess button is activated
+    // Checks and alerts whether the user input is correct and updates score
+    // Calls on getRandomImage to receive a new image
     public void guess(View view) {
         String n = name.getText().toString();
         String img = currImg;
@@ -135,7 +134,7 @@ public class QuizActivity extends AppCompatActivity {
         getRandomImage();
     }
 
-    //Gjør om drawable bilde til en bitmap.
+    //Makes drawable image to Bitmap
     public Bitmap bitmapImage(String imgFileName) {
         Bitmap b = BitmapFactory.decodeResource(getResources(), getResources().getIdentifier(imgFileName, "drawable", getPackageName()));
         Bitmap scaled = Bitmap.createScaledBitmap(b, 350, 400, true);
