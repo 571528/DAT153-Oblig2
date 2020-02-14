@@ -3,6 +3,7 @@ package com.dat153.oblig1.activities;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -13,131 +14,118 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.dat153.oblig1.R;
+import com.dat153.oblig1.utils.UserData;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.Random;
 
-public class QuizActivity extends AppCompatActivity {
+public class QuizActivity extends AppCompatActivity implements View.OnClickListener {
 
-    SharedPreferences sp;
     TextView name;
     ImageView image;
     TextView result;
     TextView scoreText;
-    ArrayList<Object> images;
-    ArrayList<Object> names;
-    Random rnd;
-    Integer score;
-    List<Bitmap> imageDatabase;
-    String currImg;
     Button btnText;
 
-    public static final String PREF = "pref";
+    private List<String> namesList; // List of names
+    private List<Bitmap> imagesList; // List of images (Bitmap)
+    private List<String> fileNames; // List of filenames (both name and image info)
+
+    UserData ud;
+    Integer score;
+
+    Random rnd;
+    int current; // Position of current name and image in Lists
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_quiz);
+        // get views
         name = findViewById(R.id.guessText);
         image = findViewById(R.id.quizImage);
         result = findViewById(R.id.resultText);
         scoreText = findViewById(R.id.scoreNumberText);
         btnText = findViewById(R.id.guessButton);
-        sp = getSharedPreferences(PREF, Context.MODE_PRIVATE);
-        score = 0;
-        // Edits view for when there are no classmates
-        if (sp.getAll().isEmpty()) {
-            System.out.println("sp is empty " + sp.getAll().size());
-            name.setText("No Classmates!");
-            image.setImageBitmap(bitmapImage("database_empty"));
-            btnText.setText("Return to main menu");
-        } else {
-            images = getImages();
-            names = getNames();
-            getRandomImage();
-        }
 
-    }
+        //get userdata
+        ud = new UserData(this);
 
-    // Creates two lists, one for image filenames and another for actual bitmap images
-    public ArrayList<Object> getImages() {
-        System.out.println("SP: " + sp.getAll().toString());
-        Map<String, ?> keys = sp.getAll();
-        images = new ArrayList<>(); // Filename list
-        imageDatabase = new ArrayList<>(); // Bitmap images list
-        int i = 0;
-        for (Map.Entry<String, ?> entry : keys.entrySet()) {
-            images.add(i, entry.getKey());
-            imageDatabase.add(bitmapImage(images.get(i).toString()));
-            System.out.println("image:" + entry.getKey() + " Name: " + entry.getValue().toString());
-            i++;
-        }
-        return images;
-    }
+        namesList = ud.getUsernames();
+        imagesList = ud.bitmapList();
+        fileNames = ud.getFilenames();
 
-    // Creates a list with classmate names
-    public ArrayList<Object> getNames() {
-        Map<String, ?> keys = sp.getAll();
-        names = new ArrayList<>();
-        int i = 0;
-        for (Map.Entry<String, ?> entry : keys.entrySet()) {
-            names.add(i, entry.getValue().toString());
-            i++;
-            System.out.println("image:" + entry.getKey() + " Name: " + entry.getValue().toString());
-        }
-        return names;
-    }
-
-    // Finds a random image and add it to imageView in quiz activity
-    public void getRandomImage() {
-        images = getImages();
         rnd = new Random();
-        int random = rnd.nextInt(images.size());
+        score = 0;
 
-        image.setImageBitmap(imageDatabase.get(random));
-        currImg = images.get(random).toString();
+        // Classmates database is EMPTY
+        if (namesList.size() <= 0) {
+            System.out.println("Names List is empty " + namesList.size());
+            name.setVisibility(View.INVISIBLE);
+            score = 0;
+            scoreText.setText("No Classmates");
+            image.setImageResource(R.drawable.database_empty);
+            btnText.setText("Return to main menu!");
+            btnText.setOnClickListener(this);
+        }
+        // At least ONE classmate
+        else {
+            current = getPosition();
+            setImage(current);
+        }
 
     }
 
-    // The action that hanppen when the guess button is activated
-    // Checks and alerts whether the user input is correct and updates score
-    // Calls on getRandomImage to receive a new image
+
+    // on -Make Guess- button click
     public void guess(View view) {
-        String n = name.getText().toString();
-        String img = currImg;
-        Boolean found = false;
-        int i = 0;
-        images = getImages();
-        names = getNames();
-        sp = getSharedPreferences(PREF,
-                Context.MODE_PRIVATE);
-        if (sp.contains(img)) {
-            while (!found) {
-                if (images.get(i).equals(img)) {
-                    found = true;
-                } else {
-                    i++;
-                }
-            }
-            if (names.get(i).toString().toUpperCase().equals(n.toUpperCase())) {
-                score += 1;
-                result.setText("Correct!");
-            } else {
-                result.setText("Wrong.. The correct name was " + names.get(i).toString());
-            }
+        //If the answer is correct
+        if (isCorrect(current)) {
+            score += 1;
+            result.setText("Correct");
+        }
+        // If the answer is wrong
+        else {
+            result.setText("Wrong... The correct name was " + namesList.get(current));
         }
         System.out.println("SCORE:" + score);
         scoreText.setText(score.toString());
         name.setText("");
-        getRandomImage();
+        current = getPosition();
+        setImage(current);
     }
 
-    //Makes drawable image to Bitmap
-    public Bitmap bitmapImage(String imgFileName) {
-        Bitmap b = BitmapFactory.decodeResource(getResources(), getResources().getIdentifier(imgFileName, "drawable", getPackageName()));
-        Bitmap scaled = Bitmap.createScaledBitmap(b, 350, 400, true);
-        return scaled;
+    // Get a random num
+    public int getPosition() {
+        return rnd.nextInt(imagesList.size());
+    }
+
+    //Set image view
+    public void setImage(int position) {
+        image.setImageBitmap(imagesList.get(position));
+    }
+
+    // Return a name that matches the image
+    public String getNameAtPosition(int position) {
+        return namesList.get(position);
+    }
+
+    // Check if the answer is correct
+    public boolean isCorrect(int position) {
+        boolean correct = false;
+        String n = name.getText().toString();
+        if (getNameAtPosition(position).toUpperCase().equals(n.toUpperCase())) {
+            correct = true;
+        }
+        return correct;
+    }
+
+    @Override
+    public void onClick(View v) {
+        Intent intent = new Intent(this, MainActivity.class);
+        startActivity(intent);
     }
 }

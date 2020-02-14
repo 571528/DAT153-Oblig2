@@ -1,10 +1,13 @@
 package com.dat153.oblig1.adapter;
 
+import java.io.File;
 import java.util.List;
 
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.os.Environment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -18,10 +21,10 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.dat153.oblig1.R;
 
 public class AdapterDB extends RecyclerView.Adapter<AdapterDB.ViewHolder> {
-    private List<String> values;
+    private List<String> names;
     private List<Bitmap> images;
-    private List<String> imgFilename;
-    SharedPreferences sp;
+    private List<String> fileNames;
+    private Context context;
 
     // Provide a reference to the views for each data item
     // Complex data items may need more than one view per item, and
@@ -41,33 +44,27 @@ public class AdapterDB extends RecyclerView.Adapter<AdapterDB.ViewHolder> {
         }
     }
 
-    // Adds to values and images
-    public void add(int position, String item, Bitmap bm, String imgFile) {
-        values.add(position, item);
-        images.add(position, bm);
-        notifyItemInserted(position);
-    }
-
-    // Removes from shared preferences
-    public void removeFromSP(int position) {
-        SharedPreferences.Editor editor = sp.edit();
-        editor.remove(imgFilename.get(position));
-        editor.commit();
+    // Remove from storage
+    public void removeFromStorage(String filename, Context context) {
+        String path = context.getExternalFilesDir(Environment.DIRECTORY_PICTURES).getAbsolutePath() + "/" + filename;
+        File file = new File(path);
+        file.delete();
     }
 
     // Removes from view
     public void remove(int position) {
-        values.remove(position);
+        names.remove(position);
         images.remove(position);
+        fileNames.remove(position);
         notifyItemRemoved(position);
     }
 
     // Provide a suitable constructor
-    public AdapterDB(Context appContext, List<String> nameList, List<Bitmap> imageList, List<String> fileList) {
-        values = nameList;
-        images = imageList;
-        imgFilename = fileList;
-        sp = appContext.getSharedPreferences("pref", Context.MODE_PRIVATE);
+    public AdapterDB(List<String> names, List<Bitmap> images, List<String> fileNames, Context context) {
+        this.names = names;
+        this.images = images;
+        this.fileNames = fileNames;
+        this.context = context;
     }
 
     // Create new views (invoked by the layout manager)
@@ -89,31 +86,31 @@ public class AdapterDB extends RecyclerView.Adapter<AdapterDB.ViewHolder> {
     public void onBindViewHolder(ViewHolder holder, final int position) {
         // - get a name and image from values and images at this position
         // - replace the contents of the view with that element
-        final String name = values.get(position);
-        final Bitmap pic = images.get(position);
-        holder.txtName.setText(name);
-        holder.icon.setImageBitmap(pic);
-
-        if (!(name.equals("No Classmates!"))) {
+        if (!(names.size() <= 0)) {
+            final String name = names.get(position);
+            final Bitmap pic = images.get(position);
+            final String filename = fileNames.get(position);
+            holder.txtName.setText(name);
+            holder.icon.setImageBitmap(pic);
             holder.rmButton.setOnClickListener(new OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    removeFromSP(position);
                     remove(position);
+                    removeFromStorage(filename, context);
+                    notifyDataSetChanged();
                 }
             });
-            holder.txtName.setText(name);
-            holder.icon.setImageBitmap(pic);
+
+
         }
-
-
     }
 
     // Return the size of values (invoked by the layout manager)
     @Override
     public int getItemCount() {
-        return values.size();
+        return names.size();
     }
+
 
 
 }

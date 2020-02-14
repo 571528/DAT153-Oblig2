@@ -2,6 +2,7 @@ package com.dat153.oblig1.activities;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -16,6 +17,9 @@ import android.widget.ImageButton;
 import android.widget.TextView;
 
 import com.dat153.oblig1.R;
+import com.dat153.oblig1.utils.UserData;
+
+import java.util.List;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -90,13 +94,40 @@ public class MainActivity extends AppCompatActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
         // Handle item selection
         switch (item.getItemId()) {
-            case R.id.sp_menu_item:
-                toSP();
+            case R.id.view_sp_menu_item:
+                toStringSP();
+                return true;
+            case R.id.removeFrom_sp_menu_item:
+                removeFromSP();
                 return true;
             default:
                 return super.onOptionsItemSelected(item);
         }
     }
+    public void toStringSP() {
+        if (sp.getAll().isEmpty()) {
+           System.out.println("sp in empty! add a user to start");
+        } else {
+            System.out.println("current owner: " + sp.getAll().toString());
+        }
+    }
 
-    public void toSP() {}
+    public void removeFromSP() {
+        if (sp.getAll().isEmpty()) {
+            System.out.println("sp in empty! No owner to remove");
+        } else {
+            sp.edit().remove("owner").commit();
+            System.out.println("sp : " + sp.getAll());
+            reload();
+        }
+
+    }
+    public void reload() {
+        Intent intent = getIntent();
+        overridePendingTransition(0, 0);
+        intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
+        finish();
+        overridePendingTransition(0, 0);
+        startActivity(intent);
+    }
 }
