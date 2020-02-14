@@ -1,19 +1,16 @@
 # DAT153-Gruppe17
 
-To add a classmate with an image use one of the following image names: 
+UPDATES FOM OBLIG 1
 
-classmate_1
+Camera use for adding a new image to a new classmate
 
-classmate_2
+Images are saved to device's sdcard. Find in Device File Explorer -> sdcard/Android/data/com.dat153.oblig1/files/Pictures
 
-classmate_3
+Removing a classmate in DatabaseActivity also removes image file from sdcard.
 
-Use these same image names to remove a classmate *fixed
+At app start owner name can be added and info is save to shared preferences
 
-App crashes if quiz is started before adding a classmate *fixed
+Preferences managed from meny in Main Activity. View/remove from shared preferences.
 
-MISSING: 
- 
- Tests 
- 
- Access preferences through app 
+Tests added
+
