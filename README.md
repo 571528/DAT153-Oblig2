@@ -1,6 +1,6 @@
-# DAT153-Gruppe17
+# DAT153 - Mobile og Distribuerte Applikasjoner
 
-UPDATES FOM OBLIG 1
+UPDATES
 
 Camera use for adding a new image to a new classmate.
 
